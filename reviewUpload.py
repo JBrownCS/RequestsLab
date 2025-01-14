@@ -14,8 +14,10 @@ import sys
 import os
 
 
-#get the directory of the files and setup the dictionary for the data
+#get the directory of the files, setup list for all posts, 
+# and setup the dictionary for the data
 fileDir = os.path.dirname(os.path.abspath(sys.argv[0])) + "/data/feedback"
+post_list = []
 feedback_dict = dict()
 
 #Cycle through the feedback files in the directory to 
@@ -32,19 +34,16 @@ for file in os.listdir(fileDir):
     Line 4 is the feedback text. Each will be gathered as its own entry
     in the dictionary
     '''
-    feedback_dict.update({
+    
+    post_list.append({
         'title' :feedback_info[0].strip(),
         'name':feedback_info[1].strip(),
         'date':feedback_info[2].strip(),
         'feedback':feedback_info[3].strip()})
+    
     feedback_file.close()
 
-    #Now POST the contents to the feedback page on the website
-    response = requests.post("http://34.170.219.157/feedback/", data=feedback_dict)
+#Now POST the contents to the feedback page on the website
+for post in post_list:
+    response = requests.post("http://35.184.22.0/feedback/", json=post)
     response.raise_for_status()
-
-
-
-
-
-
